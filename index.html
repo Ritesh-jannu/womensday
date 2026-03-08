@@ -23,19 +23,22 @@ min-height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-padding:20px;
-color:white;
+overflow:hidden;
 text-align:center;
+color:white;
 }
 
-/* START PAGE */
+/* START AREA */
 
 .start{
+position:relative;
+width:100%;
+height:100vh;
 display:flex;
 flex-direction:column;
+justify-content:center;
 align-items:center;
 gap:20px;
-animation:fadeIn 1s ease;
 }
 
 .start h1{
@@ -44,31 +47,57 @@ font-size:clamp(32px,6vw,48px);
 
 .start p{
 font-size:18px;
-max-width:420px;
+max-width:400px;
 opacity:.9;
 }
 
 .start button{
-padding:14px 34px;
+display:none;
+padding:14px 32px;
 border:none;
 border-radius:30px;
 background:white;
 color:#ff4d6d;
 font-size:16px;
 cursor:pointer;
-transition:.3s;
 }
 
-.start button:hover{
-transform:scale(1.1);
+/* BALLOONS */
+
+.balloon{
+width:60px;
+height:80px;
+border-radius:50%;
+position:absolute;
+cursor:pointer;
+animation:float 6s infinite ease-in-out;
 }
 
-/* SLIDES */
+.balloon:after{
+content:"";
+position:absolute;
+width:2px;
+height:40px;
+background:white;
+top:80px;
+left:50%;
+}
+
+@keyframes float{
+
+0%{transform:translateY(0)}
+50%{transform:translateY(-150px)}
+100%{transform:translateY(0)}
+
+}
+
+/* SLIDE */
 
 .container{
 display:none;
 width:100%;
 max-width:420px;
+padding:20px;
 }
 
 .card{
@@ -77,10 +106,7 @@ border-radius:20px;
 padding:20px;
 box-shadow:0 20px 40px rgba(0,0,0,.25);
 color:#333;
-animation:fadeIn .7s ease;
 }
-
-/* IMAGE */
 
 .card img{
 width:100%;
@@ -88,10 +114,7 @@ height:320px;
 object-fit:cover;
 border-radius:15px;
 margin-bottom:15px;
-transition:.4s;
 }
-
-/* TEXT */
 
 .message{
 font-size:18px;
@@ -99,62 +122,19 @@ line-height:1.6;
 margin-bottom:20px;
 }
 
-/* BUTTON */
-
 .nextBtn{
-padding:12px 30px;
+padding:12px 28px;
 border:none;
 border-radius:25px;
 background:#ff4d6d;
 color:white;
 font-size:16px;
 cursor:pointer;
-transition:.3s;
-}
-
-.nextBtn:hover{
-transform:scale(1.08);
-}
-
-/* DOTS */
-
-.dots{
-margin-top:10px;
-}
-
-.dot{
-height:8px;
-width:8px;
-background:#ddd;
-border-radius:50%;
-display:inline-block;
-margin:4px;
-}
-
-.active{
-background:#ff4d6d;
-}
-
-/* FINAL */
-
-.final{
-font-size:22px;
-line-height:1.6;
-padding:10px;
-}
-
-/* ANIMATION */
-
-@keyframes fadeIn{
-from{opacity:0; transform:translateY(20px)}
-to{opacity:1; transform:translateY(0)}
 }
 
 </style>
 
 </head>
-
-
 
 <body>
 
@@ -164,17 +144,15 @@ to{opacity:1; transform:translateY(0)}
 
 <h1>Happy Women's Day 💐</h1>
 
-<p>
-Today we celebrate the strength, beauty, and craziness of the most special woman in my life ❤️
-</p>
+<p>Pop the balloons to unlock your surprise 🎈</p>
 
-<button onclick="start()">Open Your Surprise ✨</button>
+<button id="startBtn" onclick="start()">Start Surprise ❤️</button>
 
 </div>
 
 
 
-<!-- SLIDE PAGE -->
+<!-- SLIDES -->
 
 <div class="container" id="slidePage">
 
@@ -188,8 +166,6 @@ Happy Women’s Day! Thanks for proving that women can do anything… including 
 
 <button class="nextBtn" onclick="nextSlide()">Next Memory →</button>
 
-<div class="dots" id="dots"></div>
-
 </div>
 
 </div>
@@ -197,6 +173,57 @@ Happy Women’s Day! Thanks for proving that women can do anything… including 
 
 
 <script>
+
+const startPage=document.getElementById("startPage")
+const startBtn=document.getElementById("startBtn")
+
+let balloons=8
+
+function createBalloons(){
+
+for(let i=0;i<balloons;i++){
+
+let b=document.createElement("div")
+
+b.className="balloon"
+
+b.style.background=randomColor()
+
+b.style.left=Math.random()*90+"%"
+
+b.style.top=Math.random()*80+"%"
+
+b.onclick=function(){
+
+this.remove()
+
+balloons--
+
+if(balloons==0){
+
+startBtn.style.display="block"
+
+}
+
+}
+
+startPage.appendChild(b)
+
+}
+
+}
+
+function randomColor(){
+
+let colors=["#ff4d6d","#ff758f","#ff8fa3","#ffb3c6","#cdb4db"]
+
+return colors[Math.floor(Math.random()*colors.length)]
+
+}
+
+createBalloons()
+
+/* SLIDES */
 
 const slides=[
 
@@ -229,29 +256,6 @@ text:"bss bss jayda hassoo mt 😂🤭"
 
 let index=0
 
-const dotsContainer=document.getElementById("dots")
-
-slides.forEach((_,i)=>{
-
-const dot=document.createElement("span")
-dot.classList.add("dot")
-
-if(i==0) dot.classList.add("active")
-
-dotsContainer.appendChild(dot)
-
-})
-
-function updateDots(){
-
-const dots=document.querySelectorAll(".dot")
-
-dots.forEach(d=>d.classList.remove("active"))
-
-dots[index].classList.add("active")
-
-}
-
 function start(){
 
 document.getElementById("startPage").style.display="none"
@@ -269,10 +273,9 @@ document.querySelector(".card").innerHTML=`
 
 <h2 style="color:#ff4d6d">Happy Women's Day ❤️</h2>
 
-<p class="final">
+<p style="font-size:20px">
 You are the most amazing woman in my life.  
-Thank you for being my happiness, my support and my love.  
-I am lucky to have you every single day. 💖
+Thank you for being my happiness. 💖
 </p>
 
 `
@@ -284,12 +287,9 @@ return
 document.getElementById("slideImg").src=slides[index].img
 document.getElementById("slideText").innerText=slides[index].text
 
-updateDots()
-
 }
 
 </script>
 
 </body>
-
 </html>
