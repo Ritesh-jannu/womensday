@@ -23,18 +23,19 @@ min-height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-text-align:center;
 padding:20px;
 color:white;
+text-align:center;
 }
 
-/* LANDING PAGE */
+/* START PAGE */
 
 .start{
 display:flex;
 flex-direction:column;
 align-items:center;
 gap:20px;
+animation:fadeIn 1s ease;
 }
 
 .start h1{
@@ -43,12 +44,12 @@ font-size:clamp(32px,6vw,48px);
 
 .start p{
 font-size:18px;
-max-width:400px;
+max-width:420px;
 opacity:.9;
 }
 
 .start button{
-padding:14px 32px;
+padding:14px 34px;
 border:none;
 border-radius:30px;
 background:white;
@@ -76,13 +77,10 @@ border-radius:20px;
 padding:20px;
 box-shadow:0 20px 40px rgba(0,0,0,.25);
 color:#333;
-animation:fade .6s ease;
+animation:fadeIn .7s ease;
 }
 
-@keyframes fade{
-from{opacity:0; transform:translateY(20px)}
-to{opacity:1; transform:translateY(0)}
-}
+/* IMAGE */
 
 .card img{
 width:100%;
@@ -90,18 +88,21 @@ height:320px;
 object-fit:cover;
 border-radius:15px;
 margin-bottom:15px;
+transition:.4s;
 }
+
+/* TEXT */
 
 .message{
 font-size:18px;
-line-height:1.5;
+line-height:1.6;
 margin-bottom:20px;
 }
 
 /* BUTTON */
 
 .nextBtn{
-padding:12px 28px;
+padding:12px 30px;
 border:none;
 border-radius:25px;
 background:#ff4d6d;
@@ -115,12 +116,38 @@ transition:.3s;
 transform:scale(1.08);
 }
 
+/* DOTS */
+
+.dots{
+margin-top:10px;
+}
+
+.dot{
+height:8px;
+width:8px;
+background:#ddd;
+border-radius:50%;
+display:inline-block;
+margin:4px;
+}
+
+.active{
+background:#ff4d6d;
+}
+
 /* FINAL */
 
 .final{
 font-size:22px;
 line-height:1.6;
-padding:20px;
+padding:10px;
+}
+
+/* ANIMATION */
+
+@keyframes fadeIn{
+from{opacity:0; transform:translateY(20px)}
+to{opacity:1; transform:translateY(0)}
 }
 
 </style>
@@ -138,11 +165,10 @@ padding:20px;
 <h1>Happy Women's Day 💐</h1>
 
 <p>
-Today is for celebrating the strength, beauty and kindness
-of the most special woman in my life.
+Today we celebrate the strength, beauty, and craziness of the most special woman in my life ❤️
 </p>
 
-<button onclick="start()">Open Your Surprise ❤️</button>
+<button onclick="start()">Open Your Surprise ✨</button>
 
 </div>
 
@@ -157,12 +183,12 @@ of the most special woman in my life.
 <img id="slideImg" src="Images/photo1.jpeg">
 
 <p class="message" id="slideText">
-You make my world brighter just by being in it ❤️
+Happy Women’s Day! Thanks for proving that women can do anything… including being dramatic for no reason. 😂
 </p>
 
-<button class="nextBtn" onclick="nextSlide()">
-Next Memory →
-</button>
+<button class="nextBtn" onclick="nextSlide()">Next Memory →</button>
+
+<div class="dots" id="dots"></div>
 
 </div>
 
@@ -176,7 +202,7 @@ const slides=[
 
 {
 img:"Images/photo1.jpeg",
-text:"Happy Women’s Day! Thanks for proving that women can do anything… including being dramatic for no reason. 😂 "
+text:"Happy Women’s Day! Thanks for proving that women can do anything… including being dramatic for no reason. 😂"
 },
 
 {
@@ -196,12 +222,35 @@ text:"Happy Women’s Day to my sleeping beauty, strong, and crazy bestie. The w
 
 {
 img:"Images/photo5.jpeg",
-text:"bss bss jayda hassoo mt😂🤭"
+text:"bss bss jayda hassoo mt 😂🤭"
 }
 
 ]
 
 let index=0
+
+const dotsContainer=document.getElementById("dots")
+
+slides.forEach((_,i)=>{
+
+const dot=document.createElement("span")
+dot.classList.add("dot")
+
+if(i==0) dot.classList.add("active")
+
+dotsContainer.appendChild(dot)
+
+})
+
+function updateDots(){
+
+const dots=document.querySelectorAll(".dot")
+
+dots.forEach(d=>d.classList.remove("active"))
+
+dots[index].classList.add("active")
+
+}
 
 function start(){
 
@@ -235,6 +284,8 @@ return
 document.getElementById("slideImg").src=slides[index].img
 document.getElementById("slideText").innerText=slides[index].text
 
+updateDots()
+
 }
 
 </script>
@@ -242,5 +293,3 @@ document.getElementById("slideText").innerText=slides[index].text
 </body>
 
 </html>
-
-
